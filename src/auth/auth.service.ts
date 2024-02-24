@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
+import { JwtService } from '@nestjs/jwt';
 
 const testUsers = [
   {
@@ -16,10 +17,16 @@ const testUsers = [
 
 @Injectable()
 export class AuthService {
+  constructor(private jwtService: JwtService) {}
+
   validateUser({ username, password }: AuthPayloadDto) {
     const findUser = testUsers.find((user) => user.username === username);
     if (!findUser) {
       return null;
+    }
+    if (password === findUser.password) {
+      const { password, ...user } = findUser;
+      this.jwtService.sign(user);
     }
   }
 }
