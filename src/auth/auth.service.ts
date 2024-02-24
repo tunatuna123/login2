@@ -26,7 +26,7 @@ export class AuthService {
     }
     if (password === findUser.password) {
       const { password, ...user } = findUser;
-      this.jwtService.sign(user);
+      return this.jwtService.sign(user);
     }
   }
 }
