@@ -3,6 +3,7 @@ import { AuthPayloadDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
 import { LocalGuard } from './guard/local.guard';
 import { Request } from 'express';
+import { JwtAuthGuard } from './guard/jwt.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -16,5 +17,8 @@ export class AuthController {
   }
 
   @Get('status')
-  status(@Req() req: Request): void {}
+  @UseGuards(JwtAuthGuard)
+  status(@Req() req: Request) {
+    console.log(req);
+  }
 }
