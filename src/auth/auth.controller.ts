@@ -1,8 +1,8 @@
-import { Body, Controller, HttpException, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards, Get, Req } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
 import { LocalGuard } from './guard/local.guard';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -14,4 +14,7 @@ export class AuthController {
     const user = this.authService.validateUser(authPayload);
     return user;
   }
+
+  @Get('status')
+  status(@Req() req: Request): void {}
 }
