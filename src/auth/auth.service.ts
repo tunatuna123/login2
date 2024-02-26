@@ -18,7 +18,6 @@ export class AuthService {
     const pw = createHash('sha256').update(password).digest('base64');
 
     if (pw === findUser.password) {
-      console.log(pw)
       const { password, ...user } = findUser;
       return this.jwtService.sign(user);
     }
