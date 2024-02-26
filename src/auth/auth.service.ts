@@ -14,8 +14,11 @@ export class AuthService {
     const findUser = await this.prisma.user.findUniqueOrThrow({
       where: { username: String(username) },
     });
+    const {createHash} = require('crypto')
+    const pw = createHash('sha256').update(password).digest('base64');
 
-    if (password === findUser.password) {
+    if (pw === findUser.password) {
+      console.log(pw)
       const { password, ...user } = findUser;
       return this.jwtService.sign(user);
     }
