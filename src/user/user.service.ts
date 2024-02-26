@@ -8,8 +8,7 @@ export class UserService {
 
   async createUser(data: User): Promise<User> {
     const {createHash} = require('crypto')
-    const pw = createHash('sha256').update(data.password).digest('base64');
-    data.password = pw
+    data.password = createHash('sha256').update(data.password).digest('base64');
 
     return this.prisma.user.create({
       data,
