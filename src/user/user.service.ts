@@ -1,7 +1,6 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
 import { User } from './user.model';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 @Injectable()
 export class UserService {
@@ -22,5 +21,16 @@ export class UserService {
     return this.prisma.user.create({
       data,
     });
+  }
+
+  async updatePassword(id: number, newPassword: JSON): Promise<User> {
+    const NewPassword = JSON.parse(JSON.stringify(newPassword)).password
+    const { createHash } = require('crypto');
+    return this.prisma.user.update({
+        where: { id: Number(id) },
+        data: {
+            password: createHash('sha256').update(NewPassword).digest('base64')
+        },
+      });
   }
 }

@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Put } from '@nestjs/common';
+import { Body, Controller, Post, Put, Param } from '@nestjs/common';
 import { User } from './user.model';
 import { UserService } from './user.service';
 
@@ -11,4 +11,11 @@ export class UserController {
     return this.userService.createUser(postData);
   }
 
+  @Put(':id')
+  async updatePassword(
+    @Body() postData: JSON,
+    @Param('id') id: number,
+  ): Promise<User> {
+    return this.userService.updatePassword(id, postData);
+  }
 }
