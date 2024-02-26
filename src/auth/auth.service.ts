@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { AuthPayloadDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from 'src/prisma.service';
+import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 
 const testUsers = [
   {
@@ -17,13 +19,16 @@ const testUsers = [
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private prisma: PrismaService,
+  ) {}
 
-  validateUser({ username, password }: AuthPayloadDto) {
-    const findUser = testUsers.find((user) => user.username === username);
-    if (!findUser) {
-      return null;
-    }
+  async validateUser({ username, password }: AuthPayloadDto) {
+    const findUser = await this.prisma.user.findUniqueOrThrow({
+      where: { username: String(username) },
+    });
+
     if (password === findUser.password) {
       const { password, ...user } = findUser;
       return this.jwtService.sign(user);
