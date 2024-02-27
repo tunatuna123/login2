@@ -22,7 +22,7 @@ export class PostService {
 
   async deletePost(id: number, username: string) {
     username = JSON.parse(atob(username.split('.', 3)[1])).username;
-    const targetPost = await this.prisma.post.findUnique({
+    const targetPost = await this.prisma.post.findUniqueOrThrow({
       where: { id: Number(id) },
     });
     if (username === JSON.parse(JSON.stringify(targetPost)).name) {
