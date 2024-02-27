@@ -28,7 +28,7 @@ export class PostService {
     if (username === JSON.parse(JSON.stringify(targetPost)).name) {
       return this.prisma.post.delete({ where: { id: Number(id) } });
     } else {
-      throw new HttpException("Don't have Authorization", 401);
+      throw new HttpException("Don't have Authorization", 403);
     }
   }
 
@@ -44,7 +44,7 @@ export class PostService {
         },
       });
     } else {
-      throw new HttpException("Don't have Authorization", 401);
+      throw new HttpException("Don't have Authorization", 403);
     }
   }
 }
