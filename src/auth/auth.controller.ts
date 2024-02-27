@@ -17,7 +17,6 @@ export class AuthController {
   @Get('status')
   @UseGuards(JwtAuthGuard)
   status(@Req() req: Request) {
-    console.log(req);
     return req.user;
   }
 }
