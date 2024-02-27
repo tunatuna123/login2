@@ -13,6 +13,12 @@ export class UserService {
       })
     ) {
       throw new HttpException('Already accout with same email exist', 401);
+    } else if (
+      await this.prisma.user.findUnique({
+        where: { username: String(data.username) },
+      })
+    ) {
+      throw new HttpException('Already accout with same username exist', 401);
     }
 
     const { createHash } = require('crypto');
@@ -24,13 +30,13 @@ export class UserService {
   }
 
   async updatePassword(id: number, newPassword: JSON): Promise<User> {
-    const NewPassword = JSON.parse(JSON.stringify(newPassword)).password
+    const NewPassword = JSON.parse(JSON.stringify(newPassword)).password;
     const { createHash } = require('crypto');
     return this.prisma.user.update({
-        where: { id: Number(id) },
-        data: {
-            password: createHash('sha256').update(NewPassword).digest('base64')
-        },
-      });
+      where: { id: Number(id) },
+      data: {
+        password: createHash('sha256').update(NewPassword).digest('base64'),
+      },
+    });
   }
 }
